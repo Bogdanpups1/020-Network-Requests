@@ -31,28 +31,41 @@
         и выведите информацию о ошибке или об успешно завершенной операции.
         */
 
-        
         let button = document.querySelector("button");
+        let output = document.querySelector("#output");
+        let title = document.getElementById("inp1");
+        let body = document.getElementById("inp2");
+        let url = " https://jsonplaceholder.typicode.com/posts/1";
+
+        fetch(url)
+            .then((response) => response.json())
+            .then(data => {
+                title.value = data.title;
+                body.value = data.body;
+            })
 
         button.addEventListener("click", function () {
-            let url = "https://jsonplaceholder.typicode.com/posts/1";
-            let task = {
+            let form = {
                 id: 1,
-                title: 'foo',
-                body: 'bar',
+                title: title.value,
+                body: body.value,
                 userId: 1,
-            };
-
+            }
             fetch(url, {
-                method: 'POST',
-                body: JSON.stringify(task),
+                method: 'PUT',
+                body: JSON.stringify(form),
                 headers: {
                     'Content-type': 'application/json; charset=UTF-8',
                 },
             })
-                .then((response) => response.json())
-                .then((json) => console.log(json));
-        });
+                .then(response => response.json())      
+                .then(data => {
+                    output.innerHTML = "Data updated!<br>" + JSON.stringify(data);
+                })
+                .catch(error => {
+                    output.innerHTML = "Error: " + error;
+                });
+        })
     </script>
 </body>
 
